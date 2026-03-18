@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bangkok Land Agency — ลานจอดรถ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Prompt:wght@300;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy2: #0f2040;
+    --gold: #c9a84c;
+    --gold2: #e8c96a;
+    --cream: #f5f0e8;
+    --white: #ffffff;
+    --gray: #8a9ab5;
+    --card-bg: rgba(255,255,255,0.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Sarabun', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* Background pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -20%, rgba(201,168,76,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 90% 80%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 60px,
+        rgba(255,255,255,0.015) 60px,
+        rgba(255,255,255,0.015) 61px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 60px,
+        rgba(255,255,255,0.015) 60px,
+        rgba(255,255,255,0.015) 61px
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10,22,40,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .nav-logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  .nav-brand {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--white);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+
+  .nav-brand span {
+    display: block;
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .nav-contact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: var(--navy);
+    padding: 9px 22px;
+    border-radius: 50px;
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-contact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201,168,76,0.35);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 40px 60px;
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Prompt', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Prompt', sans-serif;
+    font-size: clamp(36px, 7vw, 80px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .hero-title .line1 { color: var(--white); }
+  .hero-title .line2 {
+    background: linear-gradient(90deg, var(--gold), var(--gold2), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--gray);
+    font-weight: 300;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-badges {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 80px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.7s forwards;
+  }
+
+  .badge {
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.25);
+    color: var(--gold2);
+    padding: 7px 18px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-family: 'Prompt', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Prompt', sans-serif;
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 56px;
+    letter-spacing: -0.02em;
+  }
+
+  /* CARDS SECTION */
+  .lots-section {
+    position: relative;
+    z-index: 1;
+    padding: 80px 40px 100px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .lots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .lots-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+  }
+
+  .lot-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--white);
+    transition: transform 0.35s cubic-bezier(.22,1,.36,1), box-shadow 0.35s, border-color 0.35s;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  .lot-card:nth-child(1) { animation-delay: 0.1s; }
+  .lot-card:nth-child(2) { animation-delay: 0.2s; }
+  .lot-card:nth-child(3) { animation-delay: 0.3s; }
+
+  .lot-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 32px 64px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.3);
+    border-color: rgba(201,168,76,0.3);
+  }
+
+  .lot-img-wrap {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .lot-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .lot-card:hover .lot-img-wrap img {
+    transform: scale(1.06);
+  }
+
+  .lot-img-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(transparent, rgba(10,22,40,0.8));
+  }
+
+  .lot-body {
+    padding: 24px 26px 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lot-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .lot-name {
+    font-family: 'Prompt', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .lot-desc {
+    font-size: 14px;
+    color: var(--gray);
+    font-weight: 300;
+    flex: 1;
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+
+  .lot-cta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Prompt', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.04em;
+  }
+
+  .lot-cta::after {
+    content: '→';
+    transition: transform 0.2s;
+  }
+
+  .lot-card:hover .lot-cta::after {
+    transform: translateX(4px);
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 48px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .footer-brand {
+    font-family: 'Prompt', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .footer-addr {
+    font-size: 13px;
+    color: var(--gray);
+    font-weight: 300;
+    line-height: 1.9;
+  }
+
+  .footer-contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-contacts a {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+
+  .footer-contacts a:hover { color: var(--gold); }
+
+  .footer-bottom {
+    width: 100%;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    font-size: 12px;
+    color: rgba(138,154,181,0.5);
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 14px 20px; }
+    .hero { padding: 100px 20px 40px; }
+    .lots-section { padding: 40px 20px 60px; }
+    footer { padding: 36px 20px; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">🅿</div>
+    <div class="nav-brand">
+      Bangkok Land Agency
+      <span>Parking Services</span>
+    </div>
+  </a>
+  <a class="nav-contact" href="contact.html">ติดต่อเรา</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Bangkok Land Agency Co., Ltd.</div>
+  <h1 class="hero-title">
+    <div class="line1">ลานจอดรถ</div>
+    <div class="line2">Bangkok Land</div>
+  </h1>
+  <p class="hero-sub">บริการลานจอดรถ รายวัน / รายเดือน — สะดวก ปลอดภัย ทุกวัน 24 ชั่วโมง</p>
+  <div class="hero-badges">
+    <span class="badge">🕐 24 ชั่วโมง</span>
+    <span class="badge">🚗 รายวัน / รายเดือน</span>
+    <span class="badge">🔒 ปลอดภัย</span>
+    <span class="badge">📍 หลายสาขา</span>
+  </div>
+</section>
+
+<section class="lots-section">
+  <div class="section-label">เลือกลานจอดรถ</div>
+  <h2 class="section-title">สาขาของเรา</h2>
+  <div class="lots-grid">
+
+    <a class="lot-card" href="cosmo.html">
+      <div class="lot-img-wrap">
+        <img src="https://poohso.github.io/carparkbla/COSMO.jpg" alt="Cosmo Bazaar" loading="lazy">
+      </div>
+      <div class="lot-body">
+        <div class="lot-tag">ห้างสรรพสินค้า</div>
+        <div class="lot-name">Cosmo Bazaar</div>
+        <div class="lot-desc">จอดฟรี 2 ชั่วโมงแรก · รองรับ 1,835 คัน · ระบบบัตรอัตโนมัติ</div>
+        <div class="lot-cta">ดูรายละเอียด</div>
+      </div>
+    </a>
+
+    <a class="lot-card" href="taladruamjai.html">
+      <div class="lot-img-wrap">
+        <img src="https://poohso.github.io/carparkbla/RUAMJAI.jpg" alt="ตลาดสดรวมใจ" loading="lazy">
+      </div>
+      <div class="lot-body">
+        <div class="lot-tag">ตลาดสด</div>
+        <div class="lot-name">ตลาดสดรวมใจ</div>
+        <div class="lot-desc">จอดฟรี 2 ชั่วโมงแรก · รองรับ 480 คัน · เหมาจอดกลางคืนราคาพิเศษ</div>
+        <div class="lot-cta">ดูรายละเอียด</div>
+      </div>
+    </a>
+
+    <a class="lot-card" href="outlet.html">
+      <div class="lot-img-wrap">
+        <img src="https://poohso.github.io/carparkbla/OUTLET.jpg" alt="Outlet" loading="lazy">
+      </div>
+      <div class="lot-body">
+        <div class="lot-tag">Outlet · หลายโซน</div>
+        <div class="lot-name">Outlet Complex</div>
+        <div class="lot-desc">6 โซนจอดรถ · Outlet 1–6 และ Cosmo Walk · พื้นที่กว้างขวาง</div>
+        <div class="lot-cta">ดูรายละเอียด</div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">BANGKOK LAND AGENCY CO., LTD.</div>
+    <div class="footer-addr">
+      47/563–564 New Geneva Industrial Condominium 9 Floor<br>
+      Moo 3, Popular 3 Road, Ban Mai, Pak Kret<br>
+      Nonthaburi 11120
+    </div>
+  </div>
+  <div class="footer-contacts">
+    <a href="tel:025035033">📞 +66 (2) 503 5033</a>
+    <a href="tel:025035084">📠 +66 (2) 503 5084</a>
+    <a href="contact.html">✉️ ติดต่อเรา</a>
+  </div>
+  <div class="footer-bottom">© Bangkok Land Agency Co., Ltd. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
